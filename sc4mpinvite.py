@@ -38,7 +38,10 @@ def serve_challenge(filename):
 @app.route("/<server_id>", methods=["GET"])
 def invite(server_id):
 
-	response = requests.get(f"https://api.sc4mp.org/servers/{server_id}")
+	try:
+		response = requests.get(f"https://api.sc4mp.org/servers/{server_id}", timeout=5)
+	except requests.exceptions.RequestException:
+		return abort(404, description="The invite link corresponds to an SC4MP server that is currently unreachable.")
 
 	if response.status_code == 200:
 
