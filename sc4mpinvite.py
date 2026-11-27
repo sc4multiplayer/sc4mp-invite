@@ -4,6 +4,7 @@ import re
 import os
 
 from flask import Flask, send_from_directory, jsonify, redirect, abort, render_template
+from markupsafe import escape, Markup
 
 app = Flask(__name__)
 
@@ -49,7 +50,7 @@ def invite(server_id):
 		port = data["port"]
 		info = data.get("info", {})
 		name = info.get("server_name", "SC4MP Server")
-		description = remove_html_tags(info.get("server_description", "No description provided.")).replace("\n", "<br>")
+		description = escape(remove_html_tags(info.get("server_description", "No description provided."))).replace("\n", Markup("<br>"))
 		link = info.get("server_url", "www.sc4mp.org")
 
 		if not link.startswith("http"):
